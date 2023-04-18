@@ -46,7 +46,7 @@ const Header = () => {
                <Svg width='20' height='20'/>
                </div>
                 </Link>
-                <Link to='/cart'>
+                <Link to='/cart' className={styles.favourites}>
                <div>
                <Svg width='20' height='20'/>
                <span className={styles.count}>2</span>
