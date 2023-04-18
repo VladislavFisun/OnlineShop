@@ -4,6 +4,8 @@ import './index.css';
 import App from './App';
 import { QueryClient,QueryClientProvider } from 'react-query';
 import { BrowserRouter } from 'react-router-dom';
+import './styles/index.css'
+
 const queryClient = new QueryClient()
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
