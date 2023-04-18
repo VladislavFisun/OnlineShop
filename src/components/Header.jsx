@@ -1,7 +1,7 @@
 import React from 'react';
 
 import styles from '../styles/Header.module.css'
-import { Link } from 'react-router-dom';
+import { Link ,NavLink} from 'react-router-dom';
 import logo from '../images/logo.svg'
 import avater from '../images/avatar.jpg'
 import {ReactComponent as Svg} from '../svg/search.svg'
@@ -11,9 +11,9 @@ const Header = () => {
         <div className={styles.header}>
           
             <div className={styles.logo}>
-                <Link to='/'>
+                <NavLink to='/'>
                     <img src={logo} alt="stuff" />
-                </Link>
+                </NavLink>
             </div>
             <div className={styles.info}>
                 <div className={styles.user}>
