@@ -18,7 +18,7 @@ const Products = ({title,products=[],style={},amount}) => {
      <div className={styles.info}>
      <div className={styles.prices}>
             <div className={styles.price}>{price}$</div>
-            <div className={styles.oldPrice}>{price*1.25}$</div>
+            <div className={styles.oldPrice}>{price*1.5}$</div>
      </div>
      <div className={styles.purchases}>
         {Math.floor(Math.random()*20+1)}
