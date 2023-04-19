@@ -10,6 +10,7 @@ const RoutesComponent = () => {
             <Route path='/cart' />
             <Route path='/categories/$id' />
             <Route path='/products/:id' element={<SingleProduct/>} />
+            <Route path='/profile' element={<SingleProduct/>} />
         </Routes>
     );
 };

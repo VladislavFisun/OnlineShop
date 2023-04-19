@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styles from '../../styles/Product.module.css'
 import { useDispatch } from "react-redux";
 import { Link } from 'react-router-dom';
-import { addItemCart } from '../../Slices/UserSlice.js';
+import { addItemCart } from '../../Slices/UserSlice';
 
 
 const Product = (props) => {

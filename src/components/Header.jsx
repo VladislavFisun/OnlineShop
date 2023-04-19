@@ -3,23 +3,32 @@ import React from 'react';
 import styles from '../styles/Header.module.css'
 import { Link ,NavLink} from 'react-router-dom';
 import logo from '../images/logo.svg'
-import avater from '../images/avatar.jpg'
+import avatar from '../images/avatar.jpg'
 import {ReactComponent as Svg} from '../svg/search.svg'
 import { useSelector,useDispatch } from 'react-redux';
-import { showForm } from '../Slices/UserSlice.js';
+import { toggleForm,toggleFormType } from '../Slices/UserSlice';
 
 const Header = () => {
    const dispatch =useDispatch()
 
-   
+   const [value,setValue] = React.useState({
+    name:'user',
+    avatar:avatar
+   })
     const {currentUser} = useSelector(state=>state.user)
 
     const handleClick=()=>{
-        if(!currentUser) dispatch(showForm(true))
+        if(!currentUser) dispatch(toggleForm(true))
         else{
-          dispatch(showForm(false))
+          dispatch(toggleForm(false))
         }
     }
+
+    React.useEffect(()=>{
+        if(currentUser){
+            setValue(currentUser)
+        }
+    },[currentUser])
     return (
         <div className={styles.header}>
           
@@ -33,8 +42,8 @@ const Header = () => {
                 onClick={handleClick}
                 >
 
-                  <div className={styles.avatar} style={{backgroundImage:`url(${avater})`}}></div>
-                  <div className={styles.username}>Guest</div>
+                  <div className={styles.avatar} style={{backgroundImage:`url(${value?.avatar})`}}></div>
+                  <div className={styles.username}>{value?.name}</div>
                 </div>
                 
             </div>
