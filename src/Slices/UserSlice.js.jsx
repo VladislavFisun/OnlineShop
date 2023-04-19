@@ -10,9 +10,11 @@ export const getUser=createAsyncThunk("/createUser", async(arg)=>{
 })
 
 const initialState={
-currentUser:{},
+currentUser:null,
 cart:[],
-status:'fulfilled'
+status:'fulfilled',
+formType:'signup',
+showForm:false
 }
 
 const UserSlice=createSlice({
@@ -38,6 +40,9 @@ let arr = [...state.cart]
     }
 
 
+},
+showForm(state,action){
+    state.showForm=action.payload
 }
     },
     extraReducers:(build)=>{
@@ -54,4 +59,4 @@ let arr = [...state.cart]
 
 
 export default UserSlice.reducer
-export const {addItemCart} = UserSlice.actions
+export const {addItemCart,showForm} = UserSlice.actions

@@ -21,14 +21,17 @@ useEffect(()=>{
 },[dispatch])
 
 useEffect(()=>{
-dispatch(getRelatedProducts(products.oneProduct))
+    if(products.list){
 
-},[dispatch,products.list.length])
+        dispatch(getRelatedProducts(products.oneProduct))
+    }
+
+},[products.oneProduct,products.list])
 
  return (
     <>
           <Product product={products.oneProduct} amount={5} Title='"Related products'/>
-          <Products products={products.related} amount={5} title='Trending'/>
+          <Products products={products.related} amount={5} title='Related'/>
     </>
  )
     

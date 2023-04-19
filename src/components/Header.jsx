@@ -5,8 +5,21 @@ import { Link ,NavLink} from 'react-router-dom';
 import logo from '../images/logo.svg'
 import avater from '../images/avatar.jpg'
 import {ReactComponent as Svg} from '../svg/search.svg'
+import { useSelector,useDispatch } from 'react-redux';
+import { showForm } from '../Slices/UserSlice.js';
 
 const Header = () => {
+   const dispatch =useDispatch()
+
+   
+    const {currentUser} = useSelector(state=>state.user)
+
+    const handleClick=()=>{
+        if(!currentUser) dispatch(showForm(true))
+        else{
+          dispatch(showForm(false))
+        }
+    }
     return (
         <div className={styles.header}>
           
@@ -16,7 +29,10 @@ const Header = () => {
                 </NavLink>
             </div>
             <div className={styles.info}>
-                <div className={styles.user}>
+                <div className={styles.user}
+                onClick={handleClick}
+                >
+
                   <div className={styles.avatar} style={{backgroundImage:`url(${avater})`}}></div>
                   <div className={styles.username}>Guest</div>
                 </div>
