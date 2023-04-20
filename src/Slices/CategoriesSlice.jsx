@@ -4,7 +4,7 @@ import { BASE_URL } from '../utlis/constants'
 
 export const getCategories = createAsyncThunk('/categories',async(_,arg)=>{
     try {
-        const {data} = await axios.get(`${BASE_URL}`)
+        const {data} = await axios.get(`https://api.escuelajs.co/api/v1/categories`)
 
         return  data
     } catch (error) {
@@ -13,16 +13,21 @@ export const getCategories = createAsyncThunk('/categories',async(_,arg)=>{
     }
 })
 
+
+
 const initialState={
 list:[],
-status:'fulfilled'
+status:'fulfilled',
+singleCategory:null
 }
 
 const CategoriesSlice=createSlice({
     name:"categories",
     initialState,
     reducers:{
-
+getSingleCategory:(state,{payload})=>{
+    state.singleCategory =payload
+}
     },
     extraReducers:(builder)=>{
         builder
@@ -44,4 +49,4 @@ const CategoriesSlice=createSlice({
 
 
 export default CategoriesSlice.reducer
-export const {} = CategoriesSlice.actions
+export const {getSingleCategory} = CategoriesSlice.actions

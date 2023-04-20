@@ -20,6 +20,12 @@ export const getOneProduct = createAsyncThunk('/singleProduct',async(arg)=>{
     return data
 })
 
+export const filterProductsByTitle = createAsyncThunk('/filterProducts',async (value)=>{
+ let response = await axios.get(` https://api.escuelajs.co/api/v1/products/?title=${value}`)
+
+ return response.data
+})
+
 const initialState={
 list:[],
 filtered:[],
@@ -39,6 +45,9 @@ const ProductsSlice=createSlice({
        const list= state.list.filter(({price})=>price<payload?.price)
        state.related = suffle(list)
         
+       },
+       uploadFilters:(state,{payload})=>{
+        state.filtered = payload
        }
     },
     extraReducers:(builder)=>{
@@ -63,6 +72,9 @@ const ProductsSlice=createSlice({
         .addCase(getOneProduct.rejected,(state)=>{
            state.status='error'
         })
+        .addCase(filterProductsByTitle,(state,{payload})=>{
+            state.filtered = payload
+        })
     }
         
 
@@ -71,4 +83,4 @@ const ProductsSlice=createSlice({
 
 
 export default ProductsSlice.reducer
-export const {filteredByPrice,getRelatedProducts} = ProductsSlice.actions
+export const {filteredByPrice,getRelatedProducts,uploadFilters} = ProductsSlice.actions

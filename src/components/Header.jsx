@@ -1,14 +1,23 @@
-import React from 'react';
-
+import React, { useEffect } from 'react';
+import axios from 'axios';
 import styles from '../styles/Header.module.css'
 import { Link ,NavLink} from 'react-router-dom';
 import logo from '../images/logo.svg'
+import { useState } from 'react';
 import avatar from '../images/avatar.jpg'
 import {ReactComponent as Svg} from '../svg/search.svg'
 import { useSelector,useDispatch } from 'react-redux';
 import { toggleForm,toggleFormType } from '../Slices/UserSlice';
+import { useNavigate } from 'react-router-dom';
+import { uploadFilters } from '../Slices/ProductsSlice';
+import {useGetProductsQuery} from '../Slices/ApiSlice'
+import { useQuery } from 'react-query';
 
 const Header = () => {
+const navigate = useNavigate()
+
+const [searchValue,setSearchValue] = useState('')
+
    const dispatch =useDispatch()
 
    const [value,setValue] = React.useState({
@@ -16,19 +25,43 @@ const Header = () => {
     avatar:avatar
    })
     const {currentUser} = useSelector(state=>state.user)
+    const {filtered} = useSelector(state=>state.products)
+   
 
     const handleClick=()=>{
         if(!currentUser) dispatch(toggleForm(true))
         else{
-          dispatch(toggleForm(false))
+            navigate(`/profile`)
         }
     }
+
+  const getFilteredItems = async(item)=>{
+    let response  = await axios.get(`https://api.escuelajs.co/api/v1/products/?title=${item}`)
+    dispatch(uploadFilters(response.data))
+
+    return response.data
+  }  
+
+  const {data,isLoading} = useQuery(['getItems',searchValue],()=>getFilteredItems(searchValue))
+
+  console.log(data)
 
     React.useEffect(()=>{
         if(currentUser){
             setValue(currentUser)
         }
+        else{
+            setValue({
+                name:'Login',
+                avatar:avatar
+               })
+        }
     },[currentUser])
+
+   
+
+    
+
     return (
         <div className={styles.header}>
           
@@ -42,7 +75,7 @@ const Header = () => {
                 onClick={handleClick}
                 >
 
-                  <div className={styles.avatar} style={{backgroundImage:`url(${value?.avatar})`}}></div>
+                  <div className={styles.avatar} style={{backgroundImage:`url(${currentUser?currentUser?.avatar:value?.avatar})`}}></div>
                   <div className={styles.username}>{value?.name}</div>
                 </div>
                 
@@ -58,11 +91,34 @@ const Header = () => {
                      name='search'
                       placeholder='type something'
                       autoComplete='off'
-                      onChange={()=>{}}
-                      value=''
+                      onChange={(e)=>{setSearchValue(e.target.value)}}
+                      value={searchValue}
                       />
                 </div>
-               {false&&<div className={styles.box}></div>}
+               {searchValue&&<div className={styles.box}>
+                {
+                isLoading?'loading'
+                :!filtered.length?
+                'no results'
+                :
+                filtered?.map(item=>{
+                    return(
+                    <Link 
+                    onClick={()=>{setSearchValue('')}}
+                    className={styles.item}
+                    key={item.id}
+                   
+                    to={`/products/${item.id}`
+                }>
+                 <div className={styles.image}
+                 style={{background:`url(${item.images[0]})`}}
+                 />
+                 <div  className={styles.title}>{item.title}</div>
+                    </Link>
+                    )
+                })}
+               
+                </div>}
             </form>
             
             <div className={styles.account}>

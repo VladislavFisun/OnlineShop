@@ -35,6 +35,14 @@ export const loginUser =createAsyncThunk("/loginUser",async(arg)=>{
    }
 })
 
+export const updateUser=createAsyncThunk('/updateUser',async (arg)=>{
+    let {data} = await axios.put(`https://api.escuelajs.co/api/v1/users/${arg.id}`,arg)
+localStorage.setItem('user',JSON.stringify(data))
+
+    return data
+})
+
+
 const initialState={
 currentUser:localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')):null,
 cart:[],
@@ -81,6 +89,7 @@ removeItemFromCart: (state, { payload }) => {
   },
   exitAccount:(state)=>{
    state.currentUser=null
+   localStorage.removeItem('user')
   }
     },
     extraReducers:(build)=>{
@@ -91,6 +100,9 @@ removeItemFromCart: (state, { payload }) => {
         .addCase(loginUser.fulfilled,(state,action)=>{
             state.currentUser = action.payload
         })
+        .addCase(updateUser.fulfilled,(state,{payload})=>{
+            state.currentUser = payload
+        })
     
     }
         
@@ -100,4 +112,4 @@ removeItemFromCart: (state, { payload }) => {
 
 
 export default UserSlice.reducer
-export const {addItemCart,removeItemFromCart,toggleForm,toggleFormType,localUserData} = UserSlice.actions
+export const {addItemCart,exitAccount,removeItemFromCart,toggleForm,toggleFormType,localUserData} = UserSlice.actions

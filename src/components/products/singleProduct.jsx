@@ -18,7 +18,7 @@ useEffect(()=>{
     else{
         navigate('/')
     }
-},[dispatch])
+},[dispatch,id])
 
 useEffect(()=>{
     if(products.list){

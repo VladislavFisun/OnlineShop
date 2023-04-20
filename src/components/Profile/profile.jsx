@@ -1,21 +1,24 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import styles from "../../styles/Profile.module.css"
-
+import { updateUser,exitAccount } from '../../Slices/UserSlice';
+import { useNavigate } from 'react-router-dom';
 const Profile = () => {
 
 
     const dispatch = useDispatch();
   const { currentUser } = useSelector(({ user }) => user);
 
-  const [values, setValues] = useState({
+  const navigate = useNavigate()
+
+  const [values, setValues] = React.useState({
     name: "",
     email: "",
     password: "",
     avatar: "",
   });
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!currentUser) return;
 
     setValues(currentUser);
@@ -34,6 +37,11 @@ const Profile = () => {
 
     dispatch(updateUser(values));
   };
+
+  const logOut =()=>{
+    dispatch(exitAccount())
+    navigate('/')
+  }
     return (
         <section className={styles.profile}>
       {!currentUser ? (
@@ -88,8 +96,14 @@ const Profile = () => {
             />
           </div>
 
-          <button type="submit" className={styles.submit}>
+          <button
+          type="submit" className={styles.submit}>
             Update
+          </button>
+          <button
+          onClick={logOut}
+           className={styles.submit}>
+          Log out
           </button>
         </form>
       )}
