@@ -24,10 +24,12 @@ dispatch(getSingleCategory(data))
 
 
     return (
-<div>
-<Poster/>
-<Categorie data={data} isLoading={isLoading} isError={isError}/>
-</div>
+<>
+    <div style={{height:'100%'}}><Poster/></div>
+    <div>
+    <Categorie data={data} isLoading={isLoading} isError={isError}/>
+    </div>
+</>
     );
 };
 

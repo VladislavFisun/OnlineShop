@@ -1,16 +1,24 @@
 import React from 'react';
 import bannerImg from '../images/banner.png'
 import styles from '../styles/Home.module.css'
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const Banner = () => {
+  const {list} = useSelector(state=>state.categories)
+
+  let randomCategoryId = list[ Math.floor(Math.random() * 8)]?.id
+
+  console.log(list)
+
     return (
         <section className={styles.banner}>
         <div className={styles.left}>
           <p className={styles.content}>
             NEW YEAR
-            <span>SALE</span>
+         <span>SALE</span>
           </p>
-          <button className={styles.more}>See more</button>
+      <Link to={`/categories/${randomCategoryId}`}>    <button className={styles.more}>See more</button></Link>
         </div>
     
         <div

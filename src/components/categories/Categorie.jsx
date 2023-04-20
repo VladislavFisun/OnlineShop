@@ -1,13 +1,25 @@
 import React, { useEffect } from 'react';
 import styles from '../../styles/Category.module.css'
 import { useSelector } from 'react-redux';
+import { TransitionGroup,CSSTransition } from 'react-transition-group';
+import Products from '../products/Products';
+import './Category.css'
 const Categorie = ({data,isLoading,isError}) => {
+
+    const defaultValues={
+        title:'',
+        price_min:0,
+        price_max:1000,
+    }
+    
+
 const defaultParams={
-    title:'',
-    price_min:0,
-    price_max:0,
-    categoryid:''
+    categoryId:data?.id,
+    ...defaultValues
 }
+
+const [pages,setPages] = React.useState(10)
+const [values,setValues] = React.useState(defaultValues)
 const [params,setParams] = React.useState(defaultParams)
 const [filteredList,setFilteredList] = React.useState([])
     const {list} = useSelector(state=>state.products)
@@ -15,22 +27,40 @@ const [filteredList,setFilteredList] = React.useState([])
    
 useEffect(()=>{
 if(data){
-    setFilteredList(list.filter(item=>item.category.id===data.id))
+    setTimeout(()=>{
+        setFilteredList(list.filter(item=>item.category?.id===data.id&&item.price>values.price_min&&item.price<values.price_max*item.title.toLowerCase().includes(values.title) ))
+    },1000)
 }
-},[data])
+else return 
+},[data,list,values])
+
+
+const handleChange=({target:value,name})=>{
+    setValues({...values,[name]:value})
+
+}
+
+const handleSubmit=(e)=>{
+e.preventDefault();
+setParams({...params,...values})
+}
+
+const handleReset = ()=>{
+    setValues(defaultValues)
+}
 
 console.log(filteredList)
 
     return (
         <section className={styles.wrapper}>
-        {/* <h2 className={styles.title}>{cat?.name}</h2>
+        <h2 className={styles.title}>{data?.name}</h2>
   
         <form className={styles.filters} onSubmit={handleSubmit}>
           <div className={styles.filter}>
             <input
               type="text"
               name="title"
-              onChange={handleChange}
+              onChange={(e)=>{setValues({...values,title:e.target.value})}}
               placeholder="Product name"
               value={values.title}
             />
@@ -39,7 +69,7 @@ console.log(filteredList)
             <input
               type="number"
               name="price_min"
-              onChange={handleChange}
+              onChange={(e)=>{setValues({...values,price_min:e.target.value})}}
               placeholder="0"
               value={values.price_min}
             />
@@ -49,7 +79,7 @@ console.log(filteredList)
             <input
               type="number"
               name="price_max"
-              onChange={handleChange}
+              onChange={(e)=>{setValues({...values,price_max:e.target.value})}}
               placeholder="0"
               value={values.price_max}
             />
@@ -61,31 +91,33 @@ console.log(filteredList)
   
         {isLoading ? (
           <div className="preloader">Loading...</div>
-        ) : !isSuccess || !items.length ? (
+        ) :  !filteredList.length ? (
           <div className={styles.back}>
-            <span>No results</span>
-            <button onClick={handleReset}>Reset</button>
+            <span >No results</span>
+            
           </div>
         ) : (
-          <Products
-            title=""
-            products={filteredList}
-            style={{ padding: 0 }}
-            amount={items.length}
-          />
+
+                  <Products
+                    title=""
+                    products={filteredList.slice(0,pages)}
+                    style={{ padding: 0 }}
+                    amount={filteredList.length}
+                  />
+ 
         )}
   
-        {!isEnd && (
+       
           <div className={styles.more}>
-            <button
-              onClick={() =>
-                setParams({ ...params, offset: params.offset + params.limit })
-              }
+            <button 
+            onClick={()=>{
+                setPages(prev=>prev+5)
+            }}
             >
-              See more
+            {(filteredList?.length- pages)>0?'See more':'Content is over'}
             </button>
           </div>
-        )} */}
+    
       </section>
     );
 };
