@@ -1,0 +1,13 @@
+.header_icons{
+    fill:white;
+    transition: .4s;
+    width: 20px;
+    height: 20px;
+    
+    
+}
+
+.header_icons:hover{
+fill:rgb(164, 37, 238);
+transform:scale(1.2)
+}

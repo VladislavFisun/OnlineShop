@@ -1,10 +1,14 @@
 .product {
   display: flex;
   
-  width: 100%;
+  width: calc(100%-400px);
   padding: 24px;
   column-gap: 32px;
   color: var(--light);
+  width: calc(100% - 324px);
+
+  display: flex;
+  
 }
 
 .info {

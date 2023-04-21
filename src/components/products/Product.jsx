@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import styles from '../../styles/Product.module.css'
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { Link } from 'react-router-dom';
 import { addItemCart } from '../../Slices/UserSlice';
-
+import { addToFavourites,removeFromFavourites } from '../../Slices/UserSlice';
 
 const Product = (props) => {
     const SIZES=[4,4.5,5]
-    
+    const {cart,favourites} = useSelector(({user})=>user)
     const { title,product,amount} = props;
-    const {images,price,description} = product
+    const {images,price,description,id} = product
     const dispatch = useDispatch()
     const [img,setImg] = React.useState()    
     const [sizes,setSizes] = React.useState()
@@ -22,6 +22,9 @@ useEffect(()=>{
 const addToCart=()=>{
     dispatch(addItemCart(product))
 }
+
+let checkCart = cart.find(item=>item.id===id)
+let checkFavourites = favourites.find(item=>item.id===id)
 
     return (
         <section className={styles.product}>
@@ -68,16 +71,17 @@ const addToCart=()=>{
   
           <div className={styles.actions}>
             <button
-            disabled={!sizes}
+            disabled={!sizes||checkCart}
               onClick={addToCart}
               className={styles.add}
              
             >
-              Add to cart
+           {checkCart?'Already in your cart':'Add to card'}
             </button>
             <button 
-        
-            className={styles.favourite}>Add to favourites</button>
+           
+            onClick={()=>{dispatch(addToFavourites(product))}}
+            className={styles.favourite}>  {checkFavourites?<Link to='/favourites'>Already in your favorites</Link>:'Add to favourites'}</button>
           </div>
   
           <div className={styles.bottom}>

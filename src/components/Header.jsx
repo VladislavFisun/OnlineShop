@@ -12,6 +12,9 @@ import { useNavigate } from 'react-router-dom';
 import { uploadFilters } from '../Slices/ProductsSlice';
 import {useGetProductsQuery} from '../Slices/ApiSlice'
 import { useQuery } from 'react-query';
+import {ReactComponent as Cart} from '../svg/cart.svg'
+import {ReactComponent as Favorite} from '../svg/favorite.svg'
+import '../svg/svg.css'
 
 const Header = () => {
 const navigate = useNavigate()
@@ -26,6 +29,7 @@ const [searchValue,setSearchValue] = useState('')
    })
     const {currentUser} = useSelector(state=>state.user)
     const {filtered} = useSelector(state=>state.products)
+    const {cart} = useSelector(state=>state.user)
    
 
     const handleClick=()=>{
@@ -122,15 +126,15 @@ const [searchValue,setSearchValue] = useState('')
             </form>
             
             <div className={styles.account}>
-                <Link to='/'>
+                <Link to='/favourites'>
                <div>
-               <Svg width='20' height='20'/>
+               <Favorite className='header_icons'  fill='white' />
                </div>
                 </Link>
                 <Link to='/cart' className={styles.favourites}>
-               <div>
-               <Svg width='20' height='20'/>
-               <span className={styles.count}>2</span>
+               <div className={styles.cart}>
+               <Cart className='header_icons'  />
+               <span className={styles.count}>{cart.length}</span>
                </div>
                 </Link>
             </div>

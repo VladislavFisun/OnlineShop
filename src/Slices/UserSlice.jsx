@@ -45,6 +45,7 @@ localStorage.setItem('user',JSON.stringify(data))
 
 const initialState={
 currentUser:localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')):null,
+favourites:[],
 cart:[],
 status:'fulfilled',
 formType:'signup',
@@ -75,6 +76,25 @@ let arr = [...state.cart]
 
 
 },
+removeItemCart(state,{payload}){
+    const check =state?.cart?.find(({id})=>id===payload.id)
+    
+    let arr = [...state.cart]
+    
+        if(check){
+           arr = arr.map(item=>{
+            return item.id===payload.id?{...item,quantity:payload.quantity-1||item.quantity+1}:item
+           })
+           state.cart = arr
+        
+        }
+        else{
+            arr.push({...payload,quantity:1})
+            state.cart = arr
+        }
+    
+    
+    },
 removeItemFromCart: (state, { payload }) => {
     state.cart = state.cart.filter(({ id }) => id !== payload);
   },
@@ -90,7 +110,31 @@ removeItemFromCart: (state, { payload }) => {
   exitAccount:(state)=>{
    state.currentUser=null
    localStorage.removeItem('user')
-  }
+  },
+
+  addToFavourites:(state,{payload})=>{
+
+let storage = localStorage.getItem('favorite')
+
+
+ let check = state.favourites.find(item=>item.id===payload.id)
+ if(!check){
+     state.favourites = [...state.favourites,payload]
+     localStorage.setItem('favorite',JSON.stringify(state.fav))
+ }
+ else{
+    return
+ }
+  },
+  removeFromFavourites:(state,{payload})=>{
+    if(window.confirm('are you sure you want to delete?')){
+        state.favourites = state.favourites.filter(item=>item.id!==payload.id)     
+    }
+    else{
+        return
+    }
+  },
+
     },
     extraReducers:(build)=>{
         build
@@ -112,4 +156,4 @@ removeItemFromCart: (state, { payload }) => {
 
 
 export default UserSlice.reducer
-export const {addItemCart,exitAccount,removeItemFromCart,toggleForm,toggleFormType,localUserData} = UserSlice.actions
+export const {addItemCart,exitAccount,removeItemFromCart,toggleForm,toggleFormType,localUserData,removeItemCart,addToFavourites,removeFromFavourites} = UserSlice.actions
